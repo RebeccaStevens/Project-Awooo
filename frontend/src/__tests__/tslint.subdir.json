@@ -1,0 +1,3 @@
+{
+  "extends": "../../__tests__/tslint.json"
+}

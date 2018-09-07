@@ -1,0 +1,8 @@
+{
+  "extends": "../../tslint.json",
+  "rules": {
+    "missing-jsdoc": false,
+    "newline-per-chained-call": false,
+    "no-implicit-dependencies": [true, "dev"]
+  }
+}
