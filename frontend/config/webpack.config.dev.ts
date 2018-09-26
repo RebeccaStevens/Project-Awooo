@@ -14,7 +14,7 @@ import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import webpack from 'webpack';
 
 import ModuleScopePlugin from 'react-dev-utils/ModuleScopePlugin';
-// import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
+import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
 
 import { getClientEnvironment, loadClientEnvironment } from './env';
 import * as paths from './paths';
@@ -367,7 +367,7 @@ function createConfig(): webpack.Configuration {
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebookincubator/create-react-app/issues/186
-      // new WatchMissingNodeModulesPlugin(paths.APP_NODE_MODULES),
+      new WatchMissingNodeModulesPlugin(paths.NODE_MODULES),
 
       // Perform type checking and linting in a separate process to speed up compilation
       new ForkTsCheckerWebpackPlugin({
