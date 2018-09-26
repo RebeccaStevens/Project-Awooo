@@ -5,20 +5,19 @@
  * The production configuration is different and lives in a separate file.
  */
 
-import * as path from 'path';
-
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import * as path from 'path';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import webpack from 'webpack';
 
+import getCSSModuleLocalIdent from 'react-dev-utils/getCSSModuleLocalIdent';
 import ModuleScopePlugin from 'react-dev-utils/ModuleScopePlugin';
 import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
 
 import { getClientEnvironment, loadClientEnvironment } from './env';
 import * as paths from './paths';
-import { getLocalIdent } from './util';
 
 /**
  * The config.
@@ -267,7 +266,7 @@ function createConfig(): webpack.Configuration {
               use: loaders.getStyle({
                 importLoaders: 1,
                 modules: true,
-                getLocalIdent
+                getLocalIdent: getCSSModuleLocalIdent
               })
             },
 
@@ -290,7 +289,7 @@ function createConfig(): webpack.Configuration {
                 {
                   importLoaders: 2,
                   modules: true,
-                  getLocalIdent
+                  getLocalIdent: getCSSModuleLocalIdent
                 },
                 'sass-loader'
               )
@@ -346,9 +345,7 @@ function createConfig(): webpack.Configuration {
       new HtmlWebpackPlugin({
         inject: true,
         template: paths.APP_HTML,
-        templateParameters: {
-          ...env.raw
-        }
+        templateParameters: env.raw
       }),
 
       // Makes some environment variables available to the JS code, for example:
