@@ -10,7 +10,9 @@ import { register as registerServiceWorker } from './serviceWorker';
 
 import './index.css';
 
-console.info(`Environment: ${process.env.NODE_ENV}`);
+if (process.env.NODE_ENV !== 'production') {
+  console.info(`Environment: ${process.env.NODE_ENV}`);
+}
 
 ReactDOM.render(
   <App />,
