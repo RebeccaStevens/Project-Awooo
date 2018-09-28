@@ -15,12 +15,7 @@
     ],
 
     // Output
-    "module": "esnext",
     "noEmit": true,
-    "outDir": "build/dist",
-    "removeComments": true,
-    "sourceMap": true,
-    "target": "es6",
 
     // Coding style
     "allowSyntheticDefaultImports": true,
@@ -35,7 +30,6 @@
     "suppressImplicitAnyIndexErrors": true,
 
     "noImplicitAny": false,
-    "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,

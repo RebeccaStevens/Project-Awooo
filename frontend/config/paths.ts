@@ -38,15 +38,20 @@ function ensureSlash(inputPath: string, needsSlash: boolean): string {
   return inputPath;
 }
 
+export const CONFIG_PATH = resolveApp('config');
+
 export const APP_INDEX = resolveApp('src/index.tsx');
 export const APP_HTML = resolveApp('src/index.html.ejs');
-export const APP_BUILD = resolveApp('build');
+export const APP_BUILD = resolveApp('build/dist');
 export const APP_PATH = resolveApp('.');
 export const APP_PUBLIC = resolveApp('public');
 export const APP_PACKAGE_DOT_JSON = resolveApp('package.json');
 export const APP_POLYFILLS = resolveApp('config/polyfills.ts');
 export const APP_SRC = resolveApp('src');
-export const APP_SRC_PATHS = [APP_SRC];
+export const APP_SRC_PATHS = [APP_SRC, CONFIG_PATH];
+
+export const SSR_INDEX = resolveApp('src/ssr.tsx');
+export const SSR_BUILD = resolveApp('build/ssr');
 
 export const DOTENV = resolveApp('.env');
 export const NODE_MODULES = resolveApp('node_modules');

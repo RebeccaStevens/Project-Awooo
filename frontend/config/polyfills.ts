@@ -1,6 +1,5 @@
 // tslint:disable:no-import-side-effect
 
-import '@babel/polyfill';
 import 'whatwg-fetch';
 
 // In tests, polyfill requestAnimationFrame since jsdom doesn't provide it yet.

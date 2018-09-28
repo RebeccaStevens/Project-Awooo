@@ -12,7 +12,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import safePostCssParser from 'postcss-safe-parser';
-
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
@@ -158,6 +157,7 @@ function createConfig(): webpack.Configuration {
     devtool: shouldUseSourceMap ? 'source-map' : false,
 
     entry: [
+      '@babel/polyfill',
       paths.APP_POLYFILLS,
       paths.APP_INDEX
     ],
@@ -183,6 +183,8 @@ function createConfig(): webpack.Configuration {
     },
 
     optimization: {
+      minimize: true,
+
       minimizer: [
         new TerserPlugin({
           terserOptions: {
@@ -410,18 +412,23 @@ function createConfig(): webpack.Configuration {
       new HtmlWebpackPlugin({
         inject: true,
         template: paths.APP_HTML,
-        templateParameters: env.raw,
+        templateParameters: {
+          REACT_APP_MARKUP: '',
+          ...env.raw
+        },
         minify: {
-          removeComments: true,
           collapseWhitespace: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true,
-          removeEmptyAttributes: true,
-          removeStyleLinkTypeAttributes: true,
+          collapseBooleanAttributes: true,
           keepClosingSlash: true,
-          minifyJS: true,
           minifyCSS: true,
-          minifyURLs: true
+          minifyJS: true,
+          minifyURLs: true,
+          quoteCharacter: '"',
+          removeComments: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          useShortDoctype: true
         }
       }),
 

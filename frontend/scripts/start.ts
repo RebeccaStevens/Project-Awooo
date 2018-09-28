@@ -2,10 +2,14 @@
  * Start up a local dev server.
  */
 
+const args = process.argv.slice(2);
+
 // Set the environment if it isn't set.
 if (process.env.NODE_ENV === undefined) {
   // tslint:disable-next-line:no-object-mutation
-  process.env.NODE_ENV = 'development';
+  process.env.NODE_ENV = args.includes('--production') || args.includes('-p')
+    ? 'production'
+    : 'development';
 }
 
 // Makes the script crash on unhandled rejections instead of silently

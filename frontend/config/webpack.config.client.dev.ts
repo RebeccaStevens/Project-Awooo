@@ -143,6 +143,7 @@ function createConfig(): webpack.Configuration {
     devtool: 'cheap-module-source-map',
 
     entry: [
+      '@babel/polyfill',
       paths.APP_POLYFILLS,
       'react-dev-utils/webpackHotDevClient',
       paths.APP_INDEX
@@ -345,7 +346,10 @@ function createConfig(): webpack.Configuration {
       new HtmlWebpackPlugin({
         inject: true,
         template: paths.APP_HTML,
-        templateParameters: env.raw
+        templateParameters: {
+          REACT_APP_MARKUP: '',
+          ...env.raw
+        }
       }),
 
       // Makes some environment variables available to the JS code, for example:

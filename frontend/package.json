@@ -1,9 +1,10 @@
 {
-  "name": "project-awooo",
+  "name": "project-awooo-frontend",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "ts-node -P tsconfig.tools.json scripts/start.ts",
+    "start:production": "yarn build && ts-node -P tsconfig.tools.json scripts/start.ts --production",
     "build": "ts-node -P tsconfig.tools.json scripts/build.ts",
     "test": "ts-node -P tsconfig.tools.json scripts/test.ts --env=jsdom",
     "test-watch": "ts-node -P tsconfig.tools.json scripts/test.ts --env=jsdom --watch"
@@ -24,10 +25,12 @@
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
+    "webpack-node-externals": "^1.7.2",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@rebeccastevens/tslint-rebeccastevens": "^0.1.6",
@@ -54,7 +57,7 @@
     "dotenv-expand": "4.2.0",
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin": "^0.4.9",
-    "fs-extra": "7.0.0",
+    "fs-extra": "^7.0.0",
     "graphql-tag": "^2.9.2",
     "html-webpack-plugin": "^4.0.0-alpha.2",
     "jest": "^23.6.0",

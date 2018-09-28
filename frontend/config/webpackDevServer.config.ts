@@ -33,8 +33,8 @@ export async function getDevServerConfig(
 
   const webpackConfigFile =
     process.env.NODE_ENV === 'production'
-    ? './webpack.config.prod'
-    : './webpack.config.dev';
+    ? './webpack.config.client.prod'
+    : './webpack.config.client.dev';
 
   const webpackConfigImport: WebpackConfigImport = await import(webpackConfigFile);
   const webpackConfig = await webpackConfigImport.getConfig();
@@ -88,7 +88,9 @@ export async function getDevServerConfig(
       // for files like `favicon.ico`, `manifest.json`, and libraries that are
       // for some reason broken when imported through Webpack. If you just want to
       // use an image, put it in `src` and `import` it from JavaScript instead.
-      contentBase: paths.APP_PUBLIC,
+      contentBase: process.env.NODE_ENV === 'production'
+        ? paths.APP_BUILD
+        : paths.APP_PUBLIC,
 
       // By default files from `contentBase` will not trigger a page reload.
       watchContentBase: true,
@@ -98,7 +100,7 @@ export async function getDevServerConfig(
       // updated. The WebpackDevServer client is included as an entry point
       // in the Webpack development configuration. Note that only changes
       // to CSS are currently hot reloaded. JS changes will refresh the browser.
-      hot: true,
+      hot: process.env.NODE_ENV !== 'production',
 
       // It is important to tell WebpackDevServer to use the same "root" path
       // as we specified in the config. In development, we always serve from /.

@@ -13,7 +13,9 @@
     "@babel/react"
   ];
 
-  const plugins = [];
+  const plugins = [
+    '@babel/plugin-syntax-dynamic-import'
+  ];
 
   api.cache(true);
 

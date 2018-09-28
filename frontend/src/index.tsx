@@ -2,8 +2,8 @@
  * The entry point for the app.
  */
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { App } from './App';
 import { register as registerServiceWorker } from './serviceWorker';
@@ -14,15 +14,12 @@ if (process.env.NODE_ENV !== 'production') {
   console.info(`Environment: ${process.env.NODE_ENV}`);
 }
 
-ReactDOM.render(
-  <App />,
-  document.querySelector('#root')
-);
+ReactDOM.hydrate(<App />, document.querySelector('#root'));
 
 if (process.env.NODE_ENV === 'production') {
   registerServiceWorker()
-    .catch((error) => {
-      console.error('Error during service worker registration:', error);
+    .catch((_error) => {
+      console.error('An error occurred during service worker registration - service worker not registered.');
     });
 } else {
   console.info('Skipping ServiceWorker register - not in production environment.');

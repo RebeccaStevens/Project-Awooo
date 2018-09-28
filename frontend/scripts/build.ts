@@ -21,18 +21,17 @@ process.on('unhandledRejection', (error) => {
 
 import chalk from 'chalk';
 import * as fs from 'fs-extra';
-import * as path from 'path';
 import webpack from 'webpack';
 
 import checkRequiredFiles from 'react-dev-utils/checkRequiredFiles';
 import FileSizeReporter from 'react-dev-utils/FileSizeReporter';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import printBuildError from 'react-dev-utils/printBuildError';
-import printHostingInstructions from 'react-dev-utils/printHostingInstructions';
 
 import { loadClientEnvironment } from '../config/env';
 import * as paths from '../config/paths';
-import { getConfig } from '../config/webpack.config.prod';
+import { getConfig as getClientWebpackConfig } from '../config/webpack.config.client.prod';
+import { getConfig as getSSRWebpackConfig } from '../config/webpack.config.ssr.prod';
 
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
@@ -56,54 +55,41 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
   // Remove all content but keep the directory so that
   // if you're in it, you don't end up in Trash
-  fs.emptyDirSync(paths.APP_BUILD);
+  await Promise.all([
+    fs.emptyDir(paths.APP_BUILD),
+    fs.emptyDir(paths.SSR_BUILD)
+  ]);
 
-  // Merge with the public folder
-  await copyPublicFolder();
+  console.info('Creating a build to enable serverside rendering...');
+  const { warnings: ssrWarnings } = await build(await getSSRWebpackConfig());
+  printBuildSuccess(ssrWarnings);
 
-  const config = await getConfig();
+  // Load the module that was just compiled.
+  // @ts-ignore
+  const ssr = await import('../build/ssr');
+
+  // tslint:disable-next-line:no-object-mutation
+  process.env.REACT_APP_MARKUP = ssr.renderReactApp();
 
   // Start the webpack build
-  const { stats, warnings } = await build(config);
+  console.info('Creating an optimized production build...');
+  await copyPublicFolder();
+  const { stats: clientStats, warnings: clientWarnings } = await build(await getClientWebpackConfig());
+  printBuildSuccess(clientWarnings);
 
-  if (warnings.length) {
-    console.info(chalk.yellow('Compiled with warnings.\n'));
-    console.warn(warnings.join('\n\n'));
-    console.info(
-      `\nSearch for the ${
-        chalk.underline(chalk.yellow('keywords'))
-      } to learn more about each warning.`
-    );
-  } else {
-    console.info(chalk.green('Compiled successfully.\n'));
-  }
-
-  console.info('File sizes after gzip:\n');
+  console.info('Client file sizes after gzip:\n');
   printFileSizesAfterBuild(
-    stats,
+    clientStats,
     previousFileSizes,
     paths.APP_BUILD,
     WARN_AFTER_BUNDLE_GZIP_SIZE,
     WARN_AFTER_CHUNK_GZIP_SIZE
   );
   console.info();
-
-  const appPackage = await import(paths.APP_PACKAGE_DOT_JSON);
-  const publicUrl = paths.PUBLIC_URL;
-  const publicPath = config.output !== undefined ? config.output.publicPath : paths.PUBLIC_URL;
-  const buildFolder = path.relative(process.cwd(), paths.APP_BUILD);
-
-  printHostingInstructions(
-    appPackage,
-    publicUrl,
-    publicPath,
-    buildFolder,
-    true
-  );
 })()
   .catch((error) => {
     if (error !== undefined) {
-      console.info(chalk.red('Failed to compile.\n'));
+      console.info(chalk.red('Failed to compete the build.\n'));
       printBuildError(error);
     }
     process.exit(1);
@@ -114,10 +100,18 @@ interface IBuildInfo {
   readonly warnings: Array<string>;
 }
 
-// Create the production build and print the deployment instructions.
-async function build(config: webpack.Configuration): Promise<IBuildInfo> {
-  console.info('Creating an optimized production build...');
+function printBuildSuccess(warnings: Array<string>): void {
+  if (warnings.length) {
+    console.info(chalk.yellow('Compiled with warnings.\n'));
+    console.warn(warnings.join('\n\n'));
+    console.info(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
+  } else {
+    console.info(chalk.green('Compiled successfully.\n'));
+  }
+}
 
+// Create a webpack build.
+async function build(config: webpack.Configuration): Promise<IBuildInfo> {
   const compiler = webpack(config);
 
   return new Promise<IBuildInfo>((resolve, reject) => {
