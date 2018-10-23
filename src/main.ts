@@ -3,7 +3,10 @@
  * It is the entrypoint of the program and runs the main thread.
  */
 
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, protocol } from 'electron';
+import * as fs from 'fs-extra';
+import mime from 'mime/lite';
+import * as path from 'path';
 
 import { getAssetURL } from './util';
 
@@ -17,6 +20,33 @@ const debug = args.includes('--debug');
 // be closed automatically when the JavaScript object is garbage collected.
 // tslint:disable-next-line:no-let
 let mainWindow: BrowserWindow | undefined;
+
+const APP_PROTOCOL =
+  process.env.NODE_ENV === 'production'
+  ? (() => {
+    if (process.env.APP_PROTOCOL === undefined) {
+      throw new Error('APP_PROTOCOL not set'); // tslint:disable-line:no-throw
+    }
+    return process.env.APP_PROTOCOL;
+  })()
+  : undefined;
+
+const APP_HOST =
+  process.env.NODE_ENV === 'production'
+  ? (() => {
+    if (process.env.APP_HOST === undefined) {
+      throw new Error('APP_HOST not set'); // tslint:disable-line:no-throw
+    }
+    return process.env.APP_HOST;
+  })()
+  : undefined;
+
+// Register the custom schemes.
+protocol.registerStandardSchemes(
+  process.env.NODE_ENV === 'production'
+  ? [APP_PROTOCOL as string]
+  : []
+);
 
 /**
  * Create the main window of the app.
@@ -54,7 +84,10 @@ function createMainWindow(): void {
 }
 
 // Create the main window once electron is ready.
-app.once('ready', createMainWindow);
+app.once('ready', () => {
+  registerProtocols();
+  createMainWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -75,5 +108,23 @@ app.on('activate', () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+/**
+ * Registers any custom protocols in the app.
+ */
+function registerProtocols(): void {
+  if (process.env.NODE_ENV === 'production') {
+    protocol.registerStringProtocol(APP_PROTOCOL as string, async (request, callback) => {
+      const relativePath = request.url.substr((APP_HOST as string).length);
+      const filePath = path.normalize(`${__dirname}/${relativePath}`);
+      const fileExt = path.extname(filePath);
+
+      const data = await fs.readFile(filePath, { encoding: 'utf-8' });
+
+      // @ts-ignore
+      callback({
+        data,
+        mimeType: mime.getType(fileExt)
+      });
+    });
+  }
+}

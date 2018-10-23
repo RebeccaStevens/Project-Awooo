@@ -26,9 +26,9 @@ process.env.NODE_PATH =
     .join(path.delimiter);
 
 /**
- * React App environment variables regex.
+ * Environment variables regex.
  */
-const REACT_APP = /^REACT_APP_/i;
+const APP_REGEX = /^APP_/i;
 
 /**
  * Load .env* files.
@@ -96,7 +96,7 @@ export function getClientEnvironment(publicUrl: string): {
     : process.env.NODE_ENV;
 
   const raw = Object.keys(process.env)
-    .filter((key) => REACT_APP.test(key))
+    .filter((key) => APP_REGEX.test(key))
     .reduce(
       (env, key) => {
         return {
@@ -117,7 +117,7 @@ export function getClientEnvironment(publicUrl: string): {
       }
     );
 
-  // Stringify all values so we can feed into Webpack DefinePlugin
+  // Stringify all values.
   const stringified: IStringifiedClientEnvironment = {
     'process.env': Object.keys(raw)
       .reduce<Partial<IStringifiedClientEnvironment>>(

@@ -42,7 +42,8 @@ export const CONFIG_PATH = resolveApp('config');
 
 export const APP_INDEX = resolveApp('src/gui/index.tsx');
 export const APP_HTML = resolveApp('src/gui/index.html.ejs');
-export const APP_BUILD = resolveApp('build');
+export const APP_BUILD_DEV = resolveApp('build/dev');
+export const APP_BUILD_PROD = resolveApp('build/prod');
 export const APP_PATH = resolveApp('.');
 export const APP_PUBLIC = resolveApp('public');
 export const APP_PACKAGE_DOT_JSON = resolveApp('package.json');
@@ -65,3 +66,10 @@ export const TS_CONFIG_TOOLS = resolveApp('tsconfig.tools.json');
 
 export const PUBLIC_URL = ensureSlash(PUBLIC_PATH, false);
 export const SERVED_PATH = ensureSlash(PUBLIC_PATH, true);
+
+export function getAppBuildPath(environment: string | undefined): string {
+  if (environment === 'production') {
+    return APP_BUILD_PROD;
+  }
+  return APP_BUILD_DEV;
+}

@@ -4,8 +4,16 @@
     "@rebeccastevens/tslint-rebeccastevens"
   ],
   "rules": {
+    "no-console": {
+      "severity": "warn"
+    },
     "no-import-side-effect": [true, {
       "ignore-module": "((\\.html|\\.css)$|^jest$)"
     }]
+  },
+  "linterOptions": {
+    "exclude": [
+      "build/**"
+    ]
   }
 }

@@ -16,6 +16,10 @@
 
     // Output
     "noEmit": true,
+    "module": "esnext",
+    "removeComments": false,
+    "sourceMap": false,
+    "target": "es2017",
 
     // Coding style
     "allowSyntheticDefaultImports": true,

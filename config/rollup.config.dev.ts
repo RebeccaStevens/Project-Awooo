@@ -1,0 +1,73 @@
+/**
+ * Rollup Config for the dev environment.
+ */
+
+import { RollupFileOptions } from 'rollup';
+
+import * as paths from './paths';
+import { getPlugins, mainThreadInput, rendererInput } from './rollup.config.common';
+
+const environment = 'development';
+
+if (process.env.NODE_ENV !== 'development') {
+  // tslint:disable-next-line:no-throw
+  throw new Error(`Incorrect environment set (${process.env.NODE_ENV}) - it should be set to ${environment}`);
+}
+
+const plugins = getPlugins(environment);
+const outPath = paths.APP_BUILD_DEV;
+
+const mainThreadConfig: RollupFileOptions = {
+  input: mainThreadInput,
+
+  output: {
+    file: `${outPath}/main.js`,
+    format: 'cjs'
+  },
+
+  external: [
+    'electron'
+  ],
+
+  plugins: [
+    plugins.resolve,
+    plugins.commonjs,
+    plugins.typescript,
+    plugins.json,
+    plugins.replace
+  ]
+};
+
+const rendererConfig: RollupFileOptions = {
+  input: rendererInput,
+
+  output: {
+    file: `${outPath}/app.mjs`,
+    format: 'esm',
+    sourcemap: true
+  },
+
+  experimentalCodeSplitting: true,
+  manualChunks: {
+    react: [
+      'node_modules/react/index.js',
+      'node_modules/react-dom/index.js'
+    ]
+  },
+
+  plugins: [
+    plugins.resolve,
+    plugins.commonjs,
+    plugins.typescript,
+    plugins.json,
+    plugins.postcss,
+    plugins.url,
+    plugins.svgr,
+    plugins.replace
+  ]
+};
+
+export default [
+  mainThreadConfig,
+  rendererConfig
+];

@@ -2,6 +2,7 @@
   "extends": "../tslint.json",
   "rules": {
     "missing-jsdoc": false,
+    "no-console":false,
     "no-implicit-dependencies": [true, "dev"]
   }
 }
