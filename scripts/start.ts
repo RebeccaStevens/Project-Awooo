@@ -140,7 +140,7 @@ async function startDevelopment(): Promise<void> {
 
   const urls = prepareUrls(protocol, host, port);
 
-  await buildDevBundle();
+  await buildDevBundle(true);
 
   // Compilation success.
   console.info(chalk.cyan('Opening app...\n'));

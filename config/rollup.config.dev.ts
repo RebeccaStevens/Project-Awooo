@@ -37,7 +37,13 @@ const mainThreadConfig: RollupFileOptions = {
     plugins.replace
   ],
 
-  treeshake
+  treeshake,
+
+  watch: {
+    include: [
+      'src/**'
+    ]
+  }
 };
 
 const rendererConfig: RollupFileOptions = {
@@ -68,7 +74,13 @@ const rendererConfig: RollupFileOptions = {
     plugins.replace
   ],
 
-  treeshake
+  treeshake,
+
+  watch: {
+    include: [
+      'src/**'
+    ]
+  }
 };
 
 export default [
