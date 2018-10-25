@@ -9,12 +9,22 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  max-height: 4em;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .tech {
   padding: 0.2em 0.5em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-  > span:not(:first-child) {
-    margin-left: 1.5em;
+  > span {
+    white-space: nowrap;
+
+    &:not(:last-child) {
+      margin-right: 1.5em;
+    }
   }
 }
