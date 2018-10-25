@@ -22,6 +22,8 @@ const mainThreadConfig: RollupFileOptions = {
 
   output: {
     file: `${outPath}/main.js`,
+    chunkFileNames: '[name]-[hash].js',
+    assetFileNames: '[name]-[hash][extname]',
     format: 'cjs'
   },
 
@@ -46,6 +48,8 @@ const rendererConfig: RollupFileOptions = {
 
   output: {
     file: `${outPath}/app.mjs`,
+    chunkFileNames: '[name]-[hash].mjs',
+    assetFileNames: '[name]-[hash][extname]',
     format: 'esm'
   },
 
