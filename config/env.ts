@@ -1,4 +1,4 @@
-import * as fs from 'fs-extra';
+import { promises as fs, realpathSync } from 'fs';
 import * as path from 'path';
 
 import dotenv from 'dotenv';
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === undefined) {
   );
 }
 
-const appDirectory = fs.realpathSync(process.cwd());
+const appDirectory = realpathSync(process.cwd());
 
 // tslint:disable-next-line:no-object-mutation
 process.env.NODE_PATH =
@@ -50,15 +50,22 @@ async function doLoadClientEnvironment(): Promise<void> {
     ];
 
   // Load the .env* files.
-  dotenvFiles.forEach((dotenvFile) => {
-    if (fs.existsSync(dotenvFile)) {
+  await Promise.all(
+    dotenvFiles.map(async (dotenvFile) => {
+      try {
+        await fs.access(dotenvFile);
+      } catch (error) {
+        // Ignore errors.
+        return Promise.resolve();
+      }
+
       dotenvExpand(
         dotenv.config({
           path: dotenvFile
         })
       );
-    }
-  });
+    })
+  );
 }
 
 // Load Environment Variables as soon as possible (i.e. as soon as this file is imported).

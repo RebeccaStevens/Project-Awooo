@@ -1,14 +1,14 @@
 /**
- * Sample React Native App.
+ * The main component on the app.
  */
 
 import React, { Component, ReactNode } from 'react';
 
 // @ts-ignore
-import { ReactComponent as Logo } from '../assets/logo.svg';
+import { ReactComponent as Logo } from '../../../assets/logo.svg';
 
 // @ts-ignore
-import styles from './App.module.scss';
+import styles from './style.module.scss';
 
 interface IProps {}
 
@@ -32,7 +32,7 @@ export class App extends Component<IProps, IState, ISnapShot> {
           <h1 className={styles.title}>Welcome to React</h1>
         </header>
         <p className={styles.intro}>
-          To get started, edit <code>src/gui/App.tsx</code> and save to reload.
+          To get started, edit <code>src/gui/components/App/index.tsx</code> and save to reload.
         </p>
       </div>
     );

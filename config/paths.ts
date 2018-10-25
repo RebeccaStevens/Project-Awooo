@@ -1,4 +1,4 @@
-import * as fs from 'fs-extra';
+import { realpathSync } from 'fs';
 import * as path from 'path';
 
 const PUBLIC_PATH =
@@ -8,7 +8,7 @@ const PUBLIC_PATH =
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
-const appDirectory = fs.realpathSync(process.cwd());
+const appDirectory = realpathSync(process.cwd());
 
 /**
  * Get the absolute path from the given relative path.

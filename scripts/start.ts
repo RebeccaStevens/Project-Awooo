@@ -12,6 +12,8 @@ if (process.env.NODE_ENV === undefined) {
     : 'development';
 }
 
+const debug = args.includes('--debug');
+
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
@@ -55,7 +57,7 @@ const defaultPort = 8080;
 })()
   .catch((error) => {
     if (error !== undefined && error.message !== undefined) {
-      console.error(error.message);
+      console.error(error);
     }
     process.exit(1);
   });
@@ -67,9 +69,19 @@ const defaultPort = 8080;
 async function startProduction(): Promise<void> {
   console.info(chalk.cyan('Opening app...\n'));
 
-  // Open electron.
+  // Open the app.
+  const appArgs =
+    [
+      `${paths.APP_BUILD_PROD}/main.js`
+    ]
+    .concat(
+      debug
+      ? ['--debug']
+      : []
+    );
+
   // @ts-ignore
-  const app = proc.spawn(electron, [`${paths.APP_BUILD_PROD}/main.js`]);
+  const app = proc.spawn(electron, appArgs);
 
   // Forward output to the console.
   app.stdout.on('data', outputInfo);
@@ -133,9 +145,22 @@ async function startDevelopment(): Promise<void> {
   // Compilation success.
   console.info(chalk.cyan('Opening app...\n'));
 
-  // Open electron.
+  // Open the app.
+  const appArgs =
+    [
+      electronDevEntryPoint
+    ]
+    .concat(
+      debug
+      ? ['--debug']
+      : []
+    )
+    .concat(
+      ['--devserver', urls.localUrlForBrowser]
+    );
+
   // @ts-ignore
-  const app = proc.spawn(electron, [electronDevEntryPoint, '--devserver', urls.localUrlForBrowser]);
+  const app = proc.spawn(electron, appArgs);
 
   // Forward output to the console.
   app.stdout.on('data', outputInfo);

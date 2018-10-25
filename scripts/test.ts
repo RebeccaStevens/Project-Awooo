@@ -28,7 +28,7 @@ import { loadClientEnvironment } from '../config/env';
 })()
   .catch((error) => {
     if (error !== undefined && error.message !== undefined) {
-      console.error(error.message);
+      console.error(error);
     }
     process.exit(1);
   });

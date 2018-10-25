@@ -26,8 +26,7 @@ export function getPlugins(environment: string) {
         'node_modules/react/index.js': ['Component', 'PureComponent', 'Fragment', 'Children', 'createElement'],
         'node_modules/react-dom/index.js': ['render'],
         'node_modules/mime/index.js': ['getExtension', 'getType'],
-        'node_modules/mime/lite.js': ['getExtension', 'getType'],
-        'node_modules/fs-extra/lib/index.js': ['readFile']
+        'node_modules/mime/lite.js': ['getExtension', 'getType']
       }
     }),
     json: rollupPluginJson(),
@@ -51,3 +50,8 @@ export function getPlugins(environment: string) {
     url: rollupPluginUrl()
   };
 }
+
+export const treeshake = {
+  pureExternalModules: true,
+  propertyReadSideEffects: false
+};

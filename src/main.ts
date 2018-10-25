@@ -3,12 +3,13 @@
  * It is the entrypoint of the program and runs the main thread.
  */
 
+import * as assert from 'assert';
 import { app, BrowserWindow, protocol } from 'electron';
-import * as fs from 'fs-extra';
 import mime from 'mime/lite';
 import * as path from 'path';
 
 import { getAssetURL } from './util';
+import { readFile } from './util/fs';
 
 // The arguments passed in.
 const args = process.argv.slice(2);
@@ -25,7 +26,8 @@ const APP_PROTOCOL =
   process.env.NODE_ENV === 'production'
   ? (() => {
     if (process.env.APP_PROTOCOL === undefined) {
-      throw new Error('APP_PROTOCOL not set'); // tslint:disable-line:no-throw
+      // tslint:disable-next-line:no-throw
+      throw new Error('APP_PROTOCOL not set - this must be set when the environment is set to "production"');
     }
     return process.env.APP_PROTOCOL;
   })()
@@ -35,7 +37,8 @@ const APP_HOST =
   process.env.NODE_ENV === 'production'
   ? (() => {
     if (process.env.APP_HOST === undefined) {
-      throw new Error('APP_HOST not set'); // tslint:disable-line:no-throw
+      // tslint:disable-next-line:no-throw
+      throw new Error('APP_HOST not set - this must be set when the environment is set to "production"');
     }
     return process.env.APP_HOST;
   })()
@@ -44,7 +47,7 @@ const APP_HOST =
 // Register the custom schemes.
 protocol.registerStandardSchemes(
   process.env.NODE_ENV === 'production'
-  ? [APP_PROTOCOL as string]
+  ? [APP_PROTOCOL!]
   : []
 );
 
@@ -113,12 +116,15 @@ app.on('activate', () => {
  */
 function registerProtocols(): void {
   if (process.env.NODE_ENV === 'production') {
-    protocol.registerStringProtocol(APP_PROTOCOL as string, async (request, callback) => {
-      const relativePath = request.url.substr((APP_HOST as string).length);
+    assert.strictEqual(typeof APP_PROTOCOL, 'string');
+    assert.strictEqual(typeof APP_HOST, 'string');
+
+    protocol.registerStringProtocol(APP_PROTOCOL!, async (request, callback) => {
+      const relativePath = request.url.substr(APP_HOST!.length);
       const filePath = path.normalize(`${__dirname}/${relativePath}`);
       const fileExt = path.extname(filePath);
 
-      const data = await fs.readFile(filePath, { encoding: 'utf-8' });
+      const data = await readFile(filePath);
 
       // @ts-ignore
       callback({

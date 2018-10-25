@@ -9,7 +9,10 @@
     },
     "no-import-side-effect": [true, {
       "ignore-module": "((\\.html|\\.css)$|^jest$)"
-    }]
+    }],
+    "no-non-null-assertion": {
+      "severity": "warn"
+    }
   },
   "linterOptions": {
     "exclude": [

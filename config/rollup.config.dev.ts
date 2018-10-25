@@ -5,7 +5,7 @@
 import { RollupFileOptions } from 'rollup';
 
 import * as paths from './paths';
-import { getPlugins, mainThreadInput, rendererInput } from './rollup.config.common';
+import { getPlugins, mainThreadInput, rendererInput, treeshake } from './rollup.config.common';
 
 const environment = 'development';
 
@@ -35,7 +35,9 @@ const mainThreadConfig: RollupFileOptions = {
     plugins.typescript,
     plugins.json,
     plugins.replace
-  ]
+  ],
+
+  treeshake
 };
 
 const rendererConfig: RollupFileOptions = {
@@ -64,7 +66,9 @@ const rendererConfig: RollupFileOptions = {
     plugins.url,
     plugins.svgr,
     plugins.replace
-  ]
+  ],
+
+  treeshake
 };
 
 export default [
