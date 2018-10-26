@@ -3,6 +3,7 @@
  */
 
 import { PathLike, promises as fs } from 'fs';
+import mkdirp from 'mkdirp-promise';
 import * as path from 'path';
 
 /**
@@ -46,18 +47,12 @@ export async function ensureDirectoryExists(dir: string): Promise<void> {
     // tslint:disable-next-line:no-empty
     .catch(() => {});
 
-  // If it doesn't exist, create it.
   if (dirStat === undefined) {
-    // Typings incorrect.
-    // @ts-ignore
-    return fs.mkdir(dir, { recursive: true });
-  }
-
-  // If it's not a directory, try and create it.
-  if (!dirStat.isDirectory()) {
-    // Typings incorrect.
-    // @ts-ignore
-    return fs.mkdir(dir, { recursive: true });
+    // If it doesn't exist, create it.
+    await mkdirp(dir);
+  } else if (!dirStat.isDirectory()) {
+    // If it's not a directory, try and create it.
+    await mkdirp(dir);
   }
 
   // Otherwise it exists.
