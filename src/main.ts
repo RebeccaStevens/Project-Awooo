@@ -5,7 +5,6 @@
 
 import * as assert from 'assert';
 import { app, BrowserWindow, protocol } from 'electron';
-import mime from 'mime/lite';
 import * as path from 'path';
 
 // tslint:disable-next-line:no-import-side-effect
@@ -13,6 +12,7 @@ import '../polyfills/node';
 
 import { getAssetURL } from './util';
 import { readFile } from './util/fs';
+import { getMimeType } from './util/mime';
 
 // The arguments passed in.
 const args = process.argv.slice(2);
@@ -132,7 +132,7 @@ function registerProtocols(): void {
       // @ts-ignore
       callback({
         data,
-        mimeType: mime.getType(fileExt)
+        mimeType: getMimeType(fileExt)
       });
     });
   }
