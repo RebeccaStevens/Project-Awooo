@@ -13,6 +13,7 @@
     "test-watch": "ts-node -P tsconfig.tools.json scripts/test.ts --env=jsdom --watch"
   },
   "dependencies": {
+    "array.prototype.flatmap": "^1.2.1",
     "callbag": "^1.1.0",
     "callbag-for-each": "^1.1.0",
     "callbag-from-event": "^1.1.0",

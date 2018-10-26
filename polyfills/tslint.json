@@ -1,0 +1,7 @@
+{
+  "extends": "../tslint.json",
+  "rules": {
+    "no-import-side-effect": false,
+    "no-object-mutation": false
+  }
+}

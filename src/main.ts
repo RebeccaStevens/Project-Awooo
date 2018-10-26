@@ -8,6 +8,9 @@ import { app, BrowserWindow, protocol } from 'electron';
 import mime from 'mime/lite';
 import * as path from 'path';
 
+// tslint:disable-next-line:no-import-side-effect
+import '../polyfills/node';
+
 import { getAssetURL } from './util';
 import { readFile } from './util/fs';
 

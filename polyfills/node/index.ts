@@ -1,0 +1,5 @@
+/**
+ * Node polyfills.
+ */
+
+import './array';
