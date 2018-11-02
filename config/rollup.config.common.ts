@@ -9,6 +9,7 @@ import rollupPluginNodeResolve from 'rollup-plugin-node-resolve';
 import rollupPluginPostcss from 'rollup-plugin-postcss';
 import rollupPluginReplace from 'rollup-plugin-replace';
 import rollupPluginStrip from 'rollup-plugin-strip';
+import { terser as rollupPluginTerser } from 'rollup-plugin-terser';
 import rollupPluginTypescript from 'rollup-plugin-typescript';
 import rollupPluginUrl from 'rollup-plugin-url';
 
@@ -46,6 +47,7 @@ export function getPlugins(environment: string) {
     resolve: rollupPluginNodeResolve(),
     strip: rollupPluginStrip(),
     svgr: rollupPluginSvgr(),
+    terser: rollupPluginTerser(),
     typescript: rollupPluginTypescript(),
     url: rollupPluginUrl()
   };

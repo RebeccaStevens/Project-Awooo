@@ -37,7 +37,8 @@ const mainThreadConfig: RollupFileOptions = {
     plugins.typescript,
     plugins.json,
     plugins.strip,
-    plugins.replace
+    plugins.replace,
+    plugins.terser
   ],
 
   treeshake
@@ -62,7 +63,8 @@ const rendererConfig: RollupFileOptions = {
     plugins.url,
     plugins.svgr,
     plugins.strip,
-    plugins.replace
+    plugins.replace,
+    plugins.terser
   ],
 
   treeshake
