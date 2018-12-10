@@ -1,7 +1,7 @@
 {
   "extends": [
     "tslint-react",
-    "@rebeccastevens/tslint-rebeccastevens"
+    "@rebeccastevens/tslint-rebeccastevens/ruleset-recommended"
   ],
   "rules": {
     "no-console": {

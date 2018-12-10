@@ -10,16 +10,16 @@ import { ReactComponent as Logo } from '../../../assets/logo.svg';
 // @ts-ignore
 import styles from './style.module.scss';
 
-interface IProps {}
+interface Props {}
 
-interface IState {}
+interface State {}
 
-interface ISnapShot {}
+interface SnapShot {}
 
 /**
  * The root component.
  */
-export class App extends Component<IProps, IState, ISnapShot> {
+export class App extends Component<Props, State, SnapShot> {
 
   /**
    * Render this component.
